@@ -2,7 +2,8 @@ package ru.job4j.todo.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Item;
-import ru.job4j.todo.persistence.Store;
+import ru.job4j.todo.model.User;
+import ru.job4j.todo.persistence.ItemDBStore;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,13 +11,13 @@ import java.util.Optional;
 
 @Service
 public class ItemService {
-    private final Store<Item> store;
+    private final ItemDBStore store;
 
-    public ItemService(Store<Item> store) {
+    public ItemService(ItemDBStore store) {
         this.store = store;
     }
 
-    public Optional<Item> add(Item item) {
+    public boolean add(Item item) {
         return store.create(item);
     }
 
@@ -43,15 +44,19 @@ public class ItemService {
         return store.delete(id);
     }
 
-    public List<Item> findAllItem() {
-        return store.findAll();
+    public List<Item> findAllItem(final User user) {
+        return store.findAll(user);
     }
 
-    public List<Item> findNewItem() {
-        return store.findNew();
+    public List<Item> findNewItem(final User user) {
+        return store.findNew(user);
     }
 
     public List<Item> findCompletedItem() {
         return store.findCompleted();
+    }
+
+    public List<Item> findDoneItem(final User user) {
+        return store.findDone(user);
     }
 }

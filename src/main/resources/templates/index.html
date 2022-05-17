@@ -28,7 +28,7 @@
     <main>
         <h2 class="display-6 text-center mb-4"><span th:text="${pageName}"/></h2>
         <div th:if="${statusSuccess}" class="alert alert-success" role="alert">
-            Действие выполнено.
+            Действие выполнена.
         </div>
         <div th:if="${statusErr}" class="alert alert-danger" role="alert">
             Действие не выполнено.
@@ -38,6 +38,7 @@
                 <thead>
                 <tr>
                     <th style="width: 22%;">Имя задания</th>
+                    <th style="width: 22%;">Автор</th>
                     <th style="width: 22%;">Дата создания</th>
                     <th style="width: 22%;">Состояние</th>
                 </tr>
@@ -50,6 +51,7 @@
                         </a>
                         <span th:text="${item.name}"></span>
                     </th>
+                    <td th:text="${item.getUser().getName()}"/>
                     <td th:text="${item.getCreatedFormat()}"/>
                     <td>
                         <span th:if="${item.done!=null}">

@@ -15,6 +15,9 @@ public class Item implements Comparable<Item> {
     private String description;
     private LocalDateTime created = LocalDateTime.now().withNano(0);
     private LocalDateTime done;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     @Transient
     private final DateTimeFormatter
             formatter = DateTimeFormatter.ofPattern("dd-MMMM-EEEE-yyyy HH:mm:ss");
@@ -87,6 +90,14 @@ public class Item implements Comparable<Item> {
 
     public void setDone(LocalDateTime done) {
         this.done = done;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

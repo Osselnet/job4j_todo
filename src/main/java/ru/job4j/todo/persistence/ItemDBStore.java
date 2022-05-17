@@ -8,13 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 @Repository
-public class ItemDBStore implements Store<Item> {
+public class ItemDBStore {
     private static final Logger LOG = LoggerFactory.getLogger(ItemDBStore.class.getName());
 
     private final SessionFactory sf;
@@ -23,19 +24,16 @@ public class ItemDBStore implements Store<Item> {
         this.sf = sf;
     }
 
-    @Override
-    public Optional<Item> create(Item item) {
+    public boolean create(Item item) {
         return tx(
                 session -> {
-                    session.save(item);
-                    Optional<Item> result = Optional.ofNullable(session.get(Item.class, item.getId()));
+                    session.persist(item);
                     LOG.info("{}:{} заявка сохранена", item.getId(), item.getName());
-                    return result;
+                    return true;
                 }
         );
     }
 
-    @Override
     public Optional<Item> findById(int id) {
         return tx(
                 session -> {
@@ -46,7 +44,6 @@ public class ItemDBStore implements Store<Item> {
         );
     }
 
-    @Override
     public boolean update(int id, Item item) {
         return tx(
                 session -> {
@@ -76,29 +73,30 @@ public class ItemDBStore implements Store<Item> {
         );
     }
 
-    @Override
-    public List<Item> findAll() {
+    public List<Item> findAll(final User user) {
         return tx(
                 session -> {
-                    final Query query = session.createQuery("from Item");
+                    final Query query = session
+                            .createQuery("from Item where user=:user")
+                            .setParameter("user", user);
                     LOG.info("Найдено заявок {}", query.list().size());
                     return query.list();
                 }
         );
     }
 
-    @Override
-    public List<Item> findNew() {
+    public List<Item> findNew(final User user) {
         return tx(
                 session -> {
-                    final Query query = session.createQuery("from Item  where done is null");
+                    final Query query = (Query) session
+                            .createQuery("from Item where user=:user and done is null")
+                            .setParameter("user", user).list();
                     LOG.info("Найдено новых заявок {}", query.list().size());
                     return query.list();
                 }
         );
     }
 
-    @Override
     public List<Item> findCompleted() {
         return tx(
                 session -> {
@@ -106,6 +104,14 @@ public class ItemDBStore implements Store<Item> {
                     LOG.info("Найдено завершенных заявок {}", query.list().size());
                     return query.list();
                 }
+        );
+    }
+
+    public List<Item> findDone(final User user) {
+        return this.tx(
+                session -> session
+                        .createQuery("from Item where user=:user and done is not null")
+                        .setParameter("user", user).list()
         );
     }
 

@@ -26,7 +26,7 @@
     <header th:insert="blocks/header :: header"></header>
     <h2 class="display-6 text-center mb-4">Детали задания</h2>
     <div th:if="${statusSuccess}" class="alert alert-success" role="alert">
-        Действие выполнено.
+        Действие выполнена.
     </div>
     <div th:if="${statusErr}" class="alert alert-danger" role="alert">
         Действие не выполнено.
@@ -35,7 +35,10 @@
         <div class="p-5 mb-4 bg-light rounded-3">
             <h3 class="display-5 fw-bold"><span th:text="${item.name}"/></h3>
             <hr class="my-4">
-             <p class="col-md-8 fs-4">
+            <p class="col-md-8 fs-4">
+                Автор: <span th:text="${item.getUser().name}"/>
+            </p>
+            <p class="col-md-8 fs-4">
                 ID задания: <span th:text="${item.id}"/>
             </p>
             <p class="col-md-8 fs-4">
@@ -53,7 +56,7 @@
             <span th:if="${item.done==null}">
                 <form th:action="@{/doneItem}" method="post">
                     <input type="hidden" name="id" th:field="*{item.id}">
-                        <button type="submit" value="doneItem" class="btn btn-lg btn-outline-primary">Выполнено</button>
+                        <button type="submit" value="doneItem" class="btn btn-lg btn-outline-primary">Выполнена</button>
                 </form>
             </span>
             </div>
