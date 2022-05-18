@@ -109,12 +109,12 @@ public class Item implements Comparable<Item> {
             return false;
         }
         Item item = (Item) o;
-        return id == item.id && Objects.equals(name, item.name) && Objects.equals(description, item.description) && Objects.equals(created, item.created) && Objects.equals(done, item.done);
+        return id == item.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, created, done);
+        return Objects.hash(id);
     }
 
     @Override
