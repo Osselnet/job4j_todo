@@ -17,8 +17,8 @@ public class ItemService {
         this.store = store;
     }
 
-    public boolean add(Item item) {
-        return store.create(item);
+    public boolean add(Item item, String idCategory) {
+        return store.create(item, idCategory);
     }
 
     public Optional<Item> findByIdItem(int id) {

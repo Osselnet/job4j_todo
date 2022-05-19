@@ -7,6 +7,7 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 
@@ -24,9 +25,11 @@ public class ItemDBStore {
         this.sf = sf;
     }
 
-    public boolean create(Item item) {
+    public boolean create(Item item, String idCategory) {
         return tx(
                 session -> {
+                    Category category = session.find(Category.class, Integer.parseInt(idCategory));
+                    item.addCategory(category);
                     session.persist(item);
                     LOG.info("{}:{} заявка сохранена", item.getId(), item.getName());
                     return true;

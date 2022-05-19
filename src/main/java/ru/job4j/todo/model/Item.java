@@ -3,9 +3,10 @@ package ru.job4j.todo.model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Set;
 
 @Entity
 @Table(name = "items")
@@ -23,8 +24,8 @@ public class Item implements Comparable<Item> {
     @Transient
     private final DateTimeFormatter
             formatter = DateTimeFormatter.ofPattern("dd-MMMM-EEEE-yyyy HH:mm:ss");
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Category> categories = new CopyOnWriteArrayList<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private Set<Category> categories = new HashSet<>();
 
     public Item() {
     }
@@ -104,7 +105,7 @@ public class Item implements Comparable<Item> {
         this.user = user;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
@@ -112,7 +113,7 @@ public class Item implements Comparable<Item> {
         categories.add(category);
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
@@ -135,8 +136,8 @@ public class Item implements Comparable<Item> {
 
     @Override
     public String toString() {
-        return String.format("id: %s, name: %s, description: %s, create: %s, done %s",
-                id, name, description, user, formatter.format(created), formatter.format(done));
+        return String.format("id: %s, name: %s, description: %s, user: %s, create: %s, done %s",
+                id, name, description, user.getName(), formatter.format(created), formatter.format(done));
     }
 
     @Override

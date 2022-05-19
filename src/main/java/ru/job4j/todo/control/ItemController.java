@@ -9,6 +9,7 @@ import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.ItemService;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -84,9 +85,10 @@ public class ItemController {
 
     @PostMapping("/createItem")
     public String createItem(@ModelAttribute("item") Item item,
-                             HttpSession session) {
+                             HttpSession session,
+                             @RequestParam("category.id") String idCategory) {
         item.setUser((User) session.getAttribute("user"));
-        itemsService.add(item);
+        itemsService.add(item, idCategory);
         return "redirect:/detail/" + item.getId() + "?statusSuccess=true";
     }
 
