@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.ItemService;
 
 import javax.servlet.http.HttpSession;
@@ -16,9 +17,11 @@ public class ItemController {
     private static final String COMPLETED_ITEM = "Завершенные задания";
     private static final String NEW_ITEM = "Новые задания";
     private final ItemService itemsService;
+    private final CategoryService categoryService;
 
-    public ItemController(ItemService itemsService) {
+    public ItemController(ItemService itemsService, CategoryService categoryService) {
         this.itemsService = itemsService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/")
@@ -71,9 +74,10 @@ public class ItemController {
         return "redirect:/?statusErr=true";
     }
 
-     @GetMapping("/new")
+    @GetMapping("/new")
     public String addItem(Model model,
                           HttpSession session) {
+        model.addAttribute("category", categoryService.allCategory());
         model.addAttribute("user", getUserSession(session));
         return "new";
     }
