@@ -9,6 +9,7 @@ import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.ItemService;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,6 +89,7 @@ public class ItemController {
                              HttpSession session,
                              @RequestParam("category.id") String idCategory) {
         item.setUser((User) session.getAttribute("user"));
+        item.setCreated(new Date(System.currentTimeMillis()));
         itemsService.add(item, idCategory);
         return "redirect:/detail/" + item.getId() + "?statusSuccess=true";
     }

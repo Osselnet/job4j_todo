@@ -3,8 +3,8 @@ package ru.job4j.todo.model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,7 +16,8 @@ public class Item implements Comparable<Item> {
     private int id;
     private String name;
     private String description;
-    private LocalDateTime created = LocalDateTime.now().withNano(0);
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
     private LocalDateTime done;
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -73,15 +74,15 @@ public class Item implements Comparable<Item> {
         this.description = description;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
     public String getCreatedFormat() {
-        return formatter.format(created);
+        return formatter.format(created.toInstant());
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -137,7 +138,7 @@ public class Item implements Comparable<Item> {
     @Override
     public String toString() {
         return String.format("id: %s, name: %s, description: %s, user: %s, create: %s, done %s",
-                id, name, description, user.getName(), formatter.format(created), formatter.format(done));
+                id, name, description, user.getName(), formatter.format(created.toInstant()), formatter.format(done));
     }
 
     @Override
