@@ -25,11 +25,13 @@ public class ItemDBStore {
         this.sf = sf;
     }
 
-    public boolean create(Item item, String idCategory) {
+    public boolean create(Item item, List<String> idCategory) {
         return tx(
                 session -> {
-                    Category category = session.find(Category.class, Integer.parseInt(idCategory));
-                    item.addCategory(category);
+                    for (String id : idCategory) {
+                        Category category = session.find(Category.class, Integer.parseInt(id));
+                        item.addCategory(category);
+                    }
                     session.persist(item);
                     LOG.info("{}:{} заявка сохранена", item.getId(), item.getName());
                     return true;

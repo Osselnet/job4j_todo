@@ -17,7 +17,7 @@ public class ItemService {
         this.store = store;
     }
 
-    public boolean add(Item item, String idCategory) {
+    public boolean add(Item item, List<String> idCategory) {
         return store.create(item, idCategory);
     }
 

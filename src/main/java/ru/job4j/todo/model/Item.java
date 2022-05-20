@@ -25,7 +25,7 @@ public class Item implements Comparable<Item> {
     @Transient
     private final DateTimeFormatter
             formatter = DateTimeFormatter.ofPattern("dd-MMMM-EEEE-yyyy HH:mm:ss");
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Set<Category> categories = new HashSet<>();
 
     public Item() {

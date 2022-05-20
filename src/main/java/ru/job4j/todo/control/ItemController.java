@@ -87,7 +87,7 @@ public class ItemController {
     @PostMapping("/createItem")
     public String createItem(@ModelAttribute("item") Item item,
                              HttpSession session,
-                             @RequestParam("category.id") String idCategory) {
+                             @RequestParam("category.id") List<String> idCategory) {
         item.setUser((User) session.getAttribute("user"));
         item.setCreated(new Date(System.currentTimeMillis()));
         itemsService.add(item, idCategory);
